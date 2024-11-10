@@ -13,7 +13,7 @@ import { HelmetProvider } from "react-helmet-async";
 import App from "./App.jsx";
 import "./index.css";
 
-const url = import.meta.env.VITE_URL? import.meta.env.VITE_URL :"proyectonomades-fbe14.web.app"
+const url = import.meta.env.VITE_URL || "proyectonomades-fbe14.web.app"
 
 axios.defaults.baseURL = url;
 

@@ -2,10 +2,10 @@ import dotenv from 'dotenv'
 const envFile = process.env.NODE_ENV==='development'? '.env.development' : process.env.NODE_ENV==='test'? '.env.test' : process.env.NODE_ENV==='preview'? '.env.development': '.env';
 dotenv.config({ path:envFile })
 
-const {PORT, SECRET_KEY, DB_USER,  DB_PASSWORD,  DB_HOST,  DB_NAME, RENDER_DB, USER_IMG, GMAIL_USER, GMAIL_APP_PASS, S_USER_EMAIL,
+const {PORT, USER_IMG, GMAIL_USER, GMAIL_APP_PASS, S_USER_EMAIL,
     S_USER_PASS, DEFAULT_PASS}=process.env;
 
-const LocalDb = `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`
+
 
 // const firebaseConfig = {
 //     type: process.env.FIREBASE_TYPE,
@@ -23,8 +23,8 @@ const LocalDb = `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`
 
 export default {
  Port: PORT,
- Status: process.env.NODE_ENV==='development'? 'development' : process.env.NODE_ENV==='test'? 'testing': process.env.NODE_ENV==='preview'? 'preview' :'production',
- SecretKey: SECRET_KEY,
+ Status: process.env.NODE_ENV==='development'? 'development' : process.env.NODE_ENV==='preview'? 'preview' : process.env.NODE_ENV==='production'? 'production': 'production',
+ SecretKey: process.env.SECRET_KEY,
  UserEmail : S_USER_EMAIL,
  UserPass : S_USER_PASS,
  userImg: USER_IMG,
@@ -32,7 +32,7 @@ export default {
  gmailUser: GMAIL_USER,
  gmailPass: GMAIL_APP_PASS,
  //variables firebase:
- //firebaseConfig,
+ firebaseConfig: process.env.FIREBASE_SERVICE_ACCOUNT,
  //storageBucket: process.env.STORAGE_BUCKET
 
 
