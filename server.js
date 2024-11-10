@@ -15,18 +15,18 @@
 //?  8       `888  888   888  888   888   888  d8(  888  888   888  888    .o o.  )88b
 //? o8o        `8  `Y8bod8P' o888o o888o o888o `Y888""8o `Y8bod88P" `Y8bod8P' 8""888P'
 
-//todo::::::::: Desplegada el dia ::::::::::::::::::::::::::::::::::::::::::::::::::
+//todo::::::::: Desplegada el dia 10/10/2024 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
 
 import server from './server/app.js';
 import env from './server/envConfig.js'
 //import initialUser from './server/services/initialUser.js'
+const port = env.Port? env.Port : 4000
 
-
-server.listen(env.Port, async()=>{
+server.listen(port, async()=>{
     try {
         //await initialUser()
-        console.log(`Server is listening at http://localhost:${env.Port}\nServer in ${env.Status}`)
+        console.log(`Server is listening at http://localhost:${port}\nServer in ${env.Status}`)
     } catch (error) {
         console.error('Error conectando a firebase: ',error)
     }
