@@ -14,14 +14,10 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
-          #firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROYECTOPREACT }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_PROYECTOPREACT }}
           channelId: live
           projectId: proyectopreact
-          env:  # <-- Indentado un nivel respecto a "with"
-          SECRET_KEY: ${{ secrets.SECRET_KEY }}
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          DEFAULT_PASS: ${{secrets.DEFAULT_PASS}}
-          USER_IMG: ${{USER_IMG}}
+         
 
           # ... otras variables de entorno
           
