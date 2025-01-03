@@ -1,18 +1,32 @@
 import {useEffect} from 'react'
 import { useDispatch, useSelector } from "react-redux";
-import {getWorks} from '../redux/actions'
+import { Helmet } from 'react-helmet-async';
+import {getWorks, getInfo} from '../redux/actions'
 import {Header} from '../components/IndexComponents'
 
 const OurWork = () => {
   const dispatch = useDispatch();
   const featurettes = useSelector((state) => state.Works);
+  const info = useSelector((state)=>state.Landing)
+  
+ 
+  
 
+  const featurettesToShow = featurettes.filter(item => item.enable);
+  
   useEffect(()=>{
+    dispatch(getInfo())
     dispatch(getWorks())
   },[])
 
   return (
     <div className="imageBack">
+       <Helmet>
+        <title>Nomades Cabañas de pastores</title>
+        <meta name="description" content={info.info_header} />
+        <meta name="keywords" content="cabañas, pastores, vagon" />
+        {/* Puedes agregar más etiquetas meta aquí */}
+      </Helmet>
     <Header />
     <div className="container coverAbout">
       <div className="caption-nav">
@@ -20,7 +34,7 @@ const OurWork = () => {
       </div>
      <div className="aboutContainer colorBack rounded-4 shadow">
       <div className="modal-content p-2">
-        {featurettes?.map((item, index) => (
+        {featurettesToShow?.map((item, index) => (
           <div key={index}>
             <div className="row featurette">
               {/* Alterna el orden usando order-md-2 solo en imágenes impares */}

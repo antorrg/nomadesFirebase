@@ -3,7 +3,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import {useDispatch, useSelector } from 'react-redux'
 import {getItem} from '../../../redux/actions'
 import Edition from "../../../Auth/generalComponents/Edition/Edition";
-import "../../../views/styles/item.css"
+import {booleanState} from '../../../utils/generalHelpers'
+//import "../../../views/styles/item.css"
 
 
 const AdminItem = () => {
@@ -16,6 +17,7 @@ const AdminItem = () => {
    dispatch(getItem(id))
  },[id])
 
+ 
   return (
     <div>
       <div
@@ -32,7 +34,8 @@ const AdminItem = () => {
                 src={item?.img}
                 alt="image not found"
               />
-              <p className="text-muted">{item?.text}</p>
+              <p className="text-muted"><strong>Texto: </strong>{item?.text}</p>
+              <p className="text-muted"><strong>Estado: </strong> {booleanState(item?.enable)}</p>
               <Link
                 className="btn btn-md btn-secondary mt-3 mx-auto w-25"
                 to={`/admin/product/${item?.ProductId}`}
@@ -40,7 +43,7 @@ const AdminItem = () => {
                 Cerrar
               </Link>
                 <Edition
-                  allowedRoles={["Super Admin", "Admin"]}
+                  allowedRoles={["Super Admin", "Administrador"]}
                   onClick={() => {
                     navigate(`/admin/product/item/update/${item.id}`);
                   }}

@@ -4,7 +4,7 @@ import {
   showSuccess,
   showError,
 } from "../generalComponents/HandlerError";
-import setAuthHeader from "../generalComponents/axiosUtils";
+import {setAuthHeader} from "../generalComponents/axiosUtils";
 
 const verifyPassword = async (userData, setVerify) => {
   const id = userData.id;

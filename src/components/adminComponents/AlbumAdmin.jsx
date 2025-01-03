@@ -1,12 +1,20 @@
+import {useState} from 'react'
 import { Link, useNavigate } from "react-router-dom";
 import showConfirmationDialog from '../../Auth/generalComponents/sweetAlert'
 import Edition from "../../Auth/generalComponents/Edition/Edition";
 import GenericButton from "../../Auth/generalComponents/GenericButton/GenericButton";
+import {booleanState} from '../../utils/generalHelpers'
+import Loading from "../Loading";
+import {deleteProduct, deleteItem} from '../../utils/productEndPoints'
 
 const Album = ({ info, items }) => {
- 
+ const [load, setLoad] = useState(false)
   const navigate = useNavigate();
 
+  const onClose = ()=>{
+      setLoad(false)
+      navigate('/admin?tab=producto')
+  }
 
   const toEdition = () => {
     navigate(`/admin/product/update/${info.id}`);
@@ -14,14 +22,15 @@ const Album = ({ info, items }) => {
   const itemCreate = () => {
     navigate(`/admin/product/item/create/${info.id}`);
   };
-  const deleteProduct = async() => {
+  const deleteCurrentProduct = async() => {
     const confirmed = await showConfirmationDialog(
       "¿Quiere eliminar este producto?"
     );
     if (confirmed) {
       // Si el usuario hace clic en "Aceptar", ejecutar la funcion:
-      //await deleteProduct(item.id);
-      console.log('soy el producto a borrar: ',info.id)
+      await deleteProduct(info.id, onClose);
+      //console.log('soy el producto a borrar: ',info.id)
+      setLoad(true)
       
     }
   };
@@ -31,13 +40,18 @@ const Album = ({ info, items }) => {
     );
     if (confirmed) {
       // Si el usuario hace clic en "Aceptar", ejecutar la funcion:
-      //await deleteProduct(item.id);
-      console.log('soy el item a borrar: ',id)
+      await deleteItem(id, onClose);
+      setLoad(true)
+      //console.log('soy el item a borrar: ',id)
       
     }
    }
 
   return (
+    <>
+    {load?
+      <Loading/>
+    :
     <>
       <section className="py-5 text-center container">
         <div className="row py-lg-5">
@@ -54,17 +68,20 @@ const Album = ({ info, items }) => {
                 <hr></hr>
                 <h4>Descripcion:</h4>
             <p className="lead text-muted">{info?.infoBody}</p>
-            <Link className="btn btn-secondary my-2" to='/admin/product'>
+            <hr></hr>
+                <h4>Estado:</h4>
+            <p className="lead text-muted">{booleanState(info?.enable)}</p>
+            <button className="btn btn-secondary my-2" onClick={()=>navigate('/admin?tab=producto')}>
               Volver
-            </Link>
+            </button>
                 <Edition
-                  allowedRoles={["Super Admin", "Admin"]}
+                  allowedRoles={["Super Admin", "Administrador"]}
                   onClick={toEdition}
                   text={"Editar"}
                   className="btn btn-primary my-2 ms-2"
                 />
                 <Edition
-                  allowedRoles={["Super Admin", "Admin"]}
+                  allowedRoles={["Super Admin", "Administrador"]}
                   onClick={itemCreate}
                   text={"Crear Item"}
                   className="btn btn-outline-success my-2 ms-2"
@@ -72,7 +89,7 @@ const Album = ({ info, items }) => {
                 <GenericButton
                   className="btn btn-outline-danger my-2 ms-2"
                   buttonText={"Eliminar producto"}
-                  onClick={deleteProduct }
+                  onClick={deleteCurrentProduct}
                 />
           </div>
         </div>
@@ -88,14 +105,16 @@ const Album = ({ info, items }) => {
                     <p className="card-text">{item.text}</p>
                     <div className="d-flex justify-content-between align-items-center">
                       <div className="btn-group">
-                        <Link className="btn btn-sm btn-outline-secondary me-3" to={`/admin/product/item/${item.id}`}>
-                          Ver mas
-                        </Link>
+                        <button className="btn btn-sm btn-outline-secondary me-3" onClick={()=>navigate(`/admin/product/item/${item.id}`)} disabled={item.id===0? true : false}>
+                           Ver mas
+                         </button>
                         <Edition 
-                            allowedRoles={["Super Admin", "Admin"]}
+                            allowedRoles={["Super Admin", "Administrador"]}
                             onClick={()=>{delItem(item.id)}}
                             text={"Borrar"}
-                            className="btn btn-sm btn-outline-danger"/>
+                            className="btn btn-sm btn-outline-danger"
+                            disabled={item.id===0? true : false}/>
+                            
                       </div>
                     </div>
                   </div>
@@ -104,8 +123,10 @@ const Album = ({ info, items }) => {
             ))}
           </div>
         </div>
-      </section>
+      </section> 
     </>
+          }
+          </>
   );
 };
 

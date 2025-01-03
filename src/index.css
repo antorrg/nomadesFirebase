@@ -1,6 +1,24 @@
-body {
-  background-color: #f8f9fa;
-}
+@import './GeneralStyles/about.css';
+@import './GeneralStyles/admin.css';
+@import './GeneralStyles/carouselStyle.css';
+@import './GeneralStyles/contact.css';
+@import './GeneralStyles/detailCardUpd.css';
+@import './GeneralStyles/error.css';
+@import './GeneralStyles/forms.css';
+@import './GeneralStyles/item.css';
+@import './GeneralStyles/login.css';
+@import './GeneralStyles/productstyle.css';
+@import './GeneralStyles/user.css';
+@import './GeneralStyles/userComponent.css';
+@import './GeneralStyles/video.css';
+
+
+
+
+/* body {
+  background-color: bd
+} */
+/*#f8f9fa;*/
 .cover-container {
   max-width: 42em;
 }
@@ -19,6 +37,13 @@ body {
   color: black; /* Asegúrate de que el texto sea visible */
 min-height: 100vh; /* Asegura que ocupe al menos la altura completa de la pantalla */
 }
+.colorAdmin {
+  background-color: rgb(204, 202, 202);
+}
+.colorTab {
+  background-color: #fdfdfd;
+}
+
 /*
  * Header
  */
@@ -54,8 +79,28 @@ min-height: 100vh; /* Asegura que ocupe al menos la altura completa de la pantal
   color: #333;
   text-shadow: none; /* Prevent inheritance from `body` */
 }
+.btn-outline-darkgray {
+  color: black;/*#2c2c2c;  Un gris más oscuro que el de secondary */
+  border-color: #3a3a3a;
+}
 
- 
+.btn-outline-darkgray:hover,
+.btn-outline-darkgray:focus {
+  color: white;
+  background-color: #5a5c5d; /* Cambia el fondo al gris oscuro en hover */
+  border-color: #4a4a4a;
+}
+.btn-outline-greenNomades {
+  color: #137f4d;/*#2c2c2c;  Un gris más oscuro que el de secondary */
+  border-color: #198754;
+}
+
+.btn-outline-greenNomades:hover,
+.btn-outline-greenNomades:focus {
+  color: black;
+  background-color: rgba(90, 255, 255, 0.5); /* Cambia el fondo al gris oscuro en hover */
+  border-color: rgb(90, 255, 255);
+}
 .nav-masthead .nav-link {
   color: rgba(255, 255, 255, .5);
   border-bottom: .25rem solid transparent;
@@ -100,13 +145,49 @@ min-height: 100vh; /* Asegura que ocupe al menos la altura completa de la pantal
   -moz-user-select: none;
   user-select: none;
 }
+/* HTML: <div class="loader"></div> */
+.loader {
+  z-index: 1500;
+  width: 15vw;
+  padding: 18px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #3a3a3a;
+  --_m: 
+    conic-gradient(#0000 10%,#000),
+    linear-gradient(#000 0 0) content-box;
+  -webkit-mask: var(--_m);
+          mask: var(--_m);
+  -webkit-mask-composite: source-out;
+          mask-composite: subtract;
+  animation: l3 1.5s infinite linear;
+}
+@keyframes l3 {to{transform: rotate(1turn)}}
 
+.loaderFont {
+  color: #3a3a3a;
+  font-size: 2rem; /* Tamaño del texto de la clase lead */
+  font-weight: 600; /* Un poco más grueso que normal, pero no bold */
+  line-height: 1.6;
+}
+
+@media (max-width: 768px){
+  .loader {
+    width: 30vw;
+   padding: 10px;
+  }
+  .loaderFont {
+    font-size: 1.5rem; /* Tamaño del texto de la clase lead */
+  font-weight: 500; /* Un poco más grueso que normal, pero no bold */
+  line-height: 1.5;
+  }
+}
 @media (min-width: 768px) {
   .bd-placeholder-img-lg {
     font-size: 3.5rem;
   }
+ 
 }
-
 .b-example-divider {
   width: 100%;
   height: 3rem;

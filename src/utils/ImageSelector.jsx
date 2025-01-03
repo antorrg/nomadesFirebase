@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Dropdown } from 'react-bootstrap';
 import { useSelector, useDispatch} from "react-redux"; // Importamos el hook para acceder a Redux
 import { getStoredImgs} from '../redux/actions'
+import InfoFormField from '../views/AdminViews/InfoFormField'
+import {imageSelector} from '../infoHelpers'
 
 
 const ImageSelector = ({ onImageSelect }) => {
@@ -21,7 +23,10 @@ const ImageSelector = ({ onImageSelect }) => {
 
   return (
     <div className="mb-3">
-    <label className="form-label">Selecciona una imagen almacenada</label>
+    <div className="d-flex justify-content-start align-items-center">
+    <label className="form-label">Selecciona una imagen almacenada</label> 
+    <InfoFormField info={imageSelector} place={'bottom'} action={'hover'}/>
+    </div>
     
     <Dropdown>
       <Dropdown.Toggle variant="secondary" id="imageDropdown">
@@ -58,26 +63,3 @@ const ImageSelector = ({ onImageSelect }) => {
 };
 
 export default ImageSelector;
-  // <div className="mb-3">
-    //   <label className="form-label">Selecciona una imagen almacenada</label>
-    //   <select
-    //     className="form-select"
-    //     value={selectedImage}
-    //     onChange={handleImageSelect}
-    //   >
-    //     <option value="">Seleccionar...</option>
-    //     {storedImages?.map((image) => 
-    //       <option key={image.id} value={image.imageUrl}style={{ maxWidth: "200px", marginTop: "10px" }}>
-    //         {image.imageUrl}
-    //       </option>
-    //     )}
-    //   </select>
-
-    //   {selectedImage && (
-    //     <img
-    //       src={selectedImage}
-    //       alt="Imagen seleccionada"
-    //       style={{ maxWidth: "200px", marginTop: "10px" }}
-    //     />
-    //   )}
-    // </div>

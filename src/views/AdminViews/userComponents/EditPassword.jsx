@@ -5,8 +5,8 @@ import { useState } from "react";
 import showConfirmationDialog from "../../../Auth/generalComponents/sweetAlert";
 import GenericButton from "../../../Auth/generalComponents/GenericButton/GenericButton";
 import { useNavigate, useParams } from "react-router-dom";
-import "../../styles/login.css";
-import "../../styles/forms.css";
+//import "../../styles/login.css";
+//import "../../styles/forms.css";
 
 const EditPassword = () => {
   const { logout } = useAuth();

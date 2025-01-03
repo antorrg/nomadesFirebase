@@ -7,9 +7,9 @@ const Marketing = ({products, param}) => {
         {products?.map((info)=>
         <div className='col-lg-5' key={info?.id}>
           <img className='bd-placeholder-img-fluid'  src={info?.landing} alt='Imagen' style={{maxWidth:'22rem'}}/>
-          <h2 className='fw-normal'>{info?.title}</h2>
+          <h3 className='fw-normal mt-1'>{info?.title}</h3>
           <p>{info?.infoHeader}</p>
-          <p><Link className='btn btn-secondary' to={`/${param}/${info?.id}`}>Ver detalles</Link></p>
+          <p><Link className='btn btn-md btn-outline-darkgray' to={`/${param}/${info?.id}`}>Ver detalles</Link></p>
         </div>
         )}
       </div>

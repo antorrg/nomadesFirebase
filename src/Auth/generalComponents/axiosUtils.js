@@ -12,5 +12,10 @@ const setAuthHeader = () => {
 
   return config;
 };
-
-export default setAuthHeader;
+const adminValidator = (info)=>{
+  return info ? setAuthHeader() : null;
+};
+export {
+  setAuthHeader,
+  adminValidator,
+};

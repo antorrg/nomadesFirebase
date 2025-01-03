@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import ImageUploader from "../../../utils/ImageUploader";
 import showConfirmationDialog from "../../../Auth/generalComponents/sweetAlert";
+import Loading from "../../../components/Loading";
 import * as endpoint from "../../../Auth/authHelpers/Auth";
 import { getUserById } from "../../../redux/actions";
 
@@ -12,12 +13,15 @@ const UserUpgrade = () => {
   const navigate = useNavigate();
   const user1 = useSelector((state) => state.UserById);
 
+  const [load, setLoad] = useState(false)
+
   useEffect(() => {
     dispatch(getUserById(id));
   }, [id]);
 
   const onClose = () => {
     navigate(-1);
+    setLoad(false)
   };
 
   const [user, setUser] = useState({
@@ -49,13 +53,17 @@ const UserUpgrade = () => {
     );
     if (confirmed) {
       // Si el usuario hace clic en "Aceptar", ejecutar la funcion:
-      console.log(user);
+      //console.log(user);
       await endpoint.upgradeUser(id, user, onClose);
+      setLoad(true)
     }
   };
 
   return (
     <div className="imageBack">
+      {load?
+      <Loading/>
+      :
       <div className="coverBack">
         <div className="container-md modal-content colorBack formProductContainer rounded-4 shadow">
           <div className="container mt-5">
@@ -99,7 +107,7 @@ const UserUpgrade = () => {
 
                 <div className="d-flex flex-row me-3">
                   <button
-                    className="btn btn-primary mb-3 me-2"
+                    className="btn btn-md btn-primary mb-3 me-2"
                     type="button"
                     id="submitButton"
                     onClick={handleSubmit}
@@ -107,7 +115,7 @@ const UserUpgrade = () => {
                     Actualizar
                   </button>
                   <button
-                    className="btn btn-primary mb-3"
+                    className="btn btn-md btn-secondary mb-3"
                     onClick={() => {
                       onClose();
                     }}
@@ -120,6 +128,7 @@ const UserUpgrade = () => {
           </div>
         </div>
       </div>
+        }
     </div>
   );
 };

@@ -5,7 +5,7 @@
   },
   "hosting": {
     "site": "proyectonomades-fbe14",
-    "public": "dist",
+    "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",

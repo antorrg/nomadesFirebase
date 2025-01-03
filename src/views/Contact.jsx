@@ -1,11 +1,15 @@
+//import './styles/contact.css'
 import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {Header} from '../components/IndexComponents'
-import './styles/contact.css'
 import { ValidContact } from '../Auth/generalComponents/internalUtils/Validate'
+import showConfirmationDialog from '../Auth/generalComponents/sweetAlert'
+import { sendEmail } from '../utils/landingPageEndpoints'
 
 const Contact = () => {
 const navigate = useNavigate()
+const onClose = ()=>navigate(-1)
+
 const [input, setInput] = useState({
   email : "",
   issue: "",
@@ -25,12 +29,17 @@ const [error, setError] = useState({
   setError(validationErrors);
   }
 
-  const handleSubmit = ()=>{
+  const handleSubmit = async()=>{
     const validationErrors = ValidContact(input);
-
   if (Object.keys(validationErrors).length === 0) {
-    console.log("Formulario enviado", input);
-    // Lógica de envío del formulario (ej. API)
+    const confirmed = await showConfirmationDialog(
+      "¿Está seguro de enviar el email?"
+    );
+    if (confirmed) {
+      // Aquí iría la lógica para crear el producto
+      await sendEmail(input, onClose);
+      console.log("Formulario enviado", input);
+    }
   } else {
     setError(validationErrors); // Muestra los errores si hay
     //console.log("Errores de validación:", validationErrors);
@@ -43,10 +52,11 @@ const [error, setError] = useState({
                       error.issue ||
                       error.message;
 
-  const onClose = ()=>navigate(-1)
+ 
+
   const handleWhatsApp = () => {
-    const phoneNumber = '5492226556123' // Reemplaza con tu número (incluye código de país)
-    const message = '¡Hola! Me gustaría obtener más información.' // Mensaje predeterminado
+    const phoneNumber = import.meta.env.VITE_PHONE; // Reemplaza con tu número (incluye código de país)
+    const message = import.meta.env.VITE_MESSAGE // Mensaje predeterminado
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, '_blank')
   }
@@ -111,7 +121,7 @@ const [error, setError] = useState({
              </div>
               <div className="d-flex flex-row me-3">
                 <button
-                  className="btn btn-primary mb-3 me-2"
+                  className="btn btn-md btn-primary mb-3 me-2"
                   type="button"
                   id="submitButton"
                   onClick={handleSubmit}
@@ -120,7 +130,7 @@ const [error, setError] = useState({
                   Enviar
                 </button>
                 <button
-                  className="btn btn-secondary mb-3"
+                  className="btn btn-md btn-outline-darkgray mb-3"
                   onClick={() => {
                     onClose();
                   }}
@@ -128,7 +138,7 @@ const [error, setError] = useState({
                   Cancelar
                 </button>
                 <button
-                className="btn btn-success mb-3 ms-5 me-2"
+                className="btn btn-md btn-outline-success mb-3 ms-5 me-2"
                 type="button"
                 onClick={handleWhatsApp}
               >

@@ -2,7 +2,7 @@ import {useEffect} from 'react'
 import {useParams, Link} from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux'
 import {getItem, cleanState} from '../redux/actions'
-import './styles/item.css'
+//import './styles/item.css'
 
 
 const Item = () => { 
@@ -33,7 +33,7 @@ const Item = () => {
               />
               <p className="text-muted">{item?.text}</p>
               <Link
-                className="btn btn-md btn-secondary mt-3 mx-auto w-25"
+                className="btn btn-md btn-outline-darkgray mt-3 mx-auto w-20"
                 to={`/detalle/${item?.ProductId}`}
               >
                 Cerrar

@@ -3,6 +3,19 @@ import Album from "./Album";
 import Footer from "./Footer";
 import MyCarousel from "./carousel/Carousel";
 import Marketing from "./Marketing";
-import VideoOne from "./VideoOne";
+import FacebookVideo from "./FacebookVideo";
+import InstagramVideo from './InstagramVideo'
+import YouTubeVideo from "./YouTubeVideo";
+import SocialNetworks from "./SocialNetworks";
 
-export { Album, Header, Footer, MyCarousel, Marketing, VideoOne};
+export { 
+    Album, 
+    Header, 
+    Footer, 
+    MyCarousel, 
+    Marketing, 
+    FacebookVideo,
+    InstagramVideo,
+    YouTubeVideo,
+    SocialNetworks
+};

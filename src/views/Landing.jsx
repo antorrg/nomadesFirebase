@@ -2,20 +2,22 @@ import {useEffect} from 'react'
 import { Helmet } from 'react-helmet-async';
 import {Link} from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux'
-import {getInfo, getProduct} from '../redux/actions'
+import {getInfo, getProduct, getMedia} from '../redux/actions'
 import * as Cp from '../components/IndexComponents'
 
 
 
-const Landing = () => {
+const Landing = ({theme, toggleTheme}) => {
   const dispatch = useDispatch()
   const info = useSelector((state)=>state.Landing)
   const products = useSelector((state)=>state.Products)
+  const media = useSelector((state)=>state.Media)
   useEffect(()=>{
     dispatch(getInfo())
     dispatch(getProduct())
+    dispatch(getMedia())
   },[])
-  //console.log('soy info',info)
+  
 
   return (
     <>
@@ -26,7 +28,7 @@ const Landing = () => {
         {/* Puedes agregar más etiquetas meta aquí */}
       </Helmet>
     <div className='min-vh-100 cover-container1 d-flex w-100 p-3 mx-auto flex-column' style={{backgroundImage:`url(${info.image}||https://img.freepik.com/foto-gratis/cascada-barco-limpio-china-natural_1417-1356.jpg)`}}>
-    <Cp.Header/>
+    <Cp.Header theme={theme} toggleTheme={toggleTheme}/>
     <section className='px-3'>
       <div className='caption-title'>
         <h1>{info?.title}</h1>
@@ -46,9 +48,10 @@ const Landing = () => {
     <Cp.MyCarousel info={products}/>
     <Cp.Marketing products = {products} param={'detalle'}/>
     <hr></hr>
-    <Cp.VideoOne/>
     </section>
     <section>
+      <Cp.SocialNetworks/>
+      <hr></hr>
     </section>
     <Cp.Footer/>
     

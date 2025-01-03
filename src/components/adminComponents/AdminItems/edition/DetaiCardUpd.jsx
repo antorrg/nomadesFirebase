@@ -5,14 +5,18 @@ import { getItem } from "../../../../redux/actions";
 import { updateItem } from "../../../../utils/productEndPoints";
 import { Form } from "react-bootstrap";
 import showConfirmationDialog from "../../../../Auth/generalComponents/sweetAlert";
-import "./detailCardUpd.css";
+//import "./detailCardUpd.css";
 import ImageUploader from "../../../../utils/ImageUploader";
 import ImageSelector from "../../../../utils/ImageSelector";
+import Loading from "../../../Loading";
+import InfoFormField from "../../../../views/AdminViews/InfoFormField";
 
 const DetailCardUpd = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
+  const [load, setLoad] = useState(false)
+
   const [imgUrl, setImgUrl] = useState(false)
   const item1 = useSelector((state) => state.Item);
   useEffect(() => {
@@ -20,12 +24,15 @@ const DetailCardUpd = () => {
   }, [id]);
 
   const onClose = () => {
-    navigate(-1);
+    setLoad(false)
+      navigate(-1);
+    
   };
 
   const [item, setItem] = useState({
     text: "",
     img: "",
+    enable:false,
     saver: false,
     useImg: false,
   });
@@ -35,6 +42,7 @@ const DetailCardUpd = () => {
       setItem({
         text: item1.text || "",
         img: item1.img || "",
+        enable:item1.enable || false,
         saver: item1.saver || false,
         useImg: item1.useImg || false,
       });
@@ -85,11 +93,15 @@ const DetailCardUpd = () => {
     if (confirmed) {
       // Si el usuario hace clic en "Aceptar", ejecutar la funcion:
       await updateItem(id, item, onClose);
+      setLoad(true)
       
     }
   };
   return (
     <div className="imageBack">
+      {load?
+      <Loading/>
+      :
       <div className="coverBack">
         <div className="container-md modal-content colorBack formProductContainer rounded-4 shadow">
           <div className="container mt-5">
@@ -136,6 +148,19 @@ const DetailCardUpd = () => {
                     onChange={handleInputChange}
                   />
                 </div>
+                <label htmlFor="enable" className="form-label">
+                    Mostrar al publico
+                  </label>
+                  <select
+                    className="form-select mb-2"
+                    id="enable"
+                    name="enable"
+                    value={item.enable}
+                    onChange={handleInputChange}
+                  >
+                    <option value="true">Mostrar</option>
+                    <option value="false">No mostrar</option>
+                  </select>
                 <div className="mb-3 form-check form-switch">
                     <Form.Check 
                       type="switch"
@@ -148,7 +173,7 @@ const DetailCardUpd = () => {
 
                 <div className="d-flex flex-row me-3">
                   <button
-                    className="btn btn-primary mb-3 me-2"
+                    className="btn btn-md btn-primary mb-3 me-2"
                     type="button"
                     id="submitButton"
                     onClick={handleSubmit}
@@ -156,7 +181,7 @@ const DetailCardUpd = () => {
                     Actualizar
                   </button>
                   <button
-                    className="btn btn-primary mb-3"
+                    className="btn btn-md btn-secondary mb-3"
                     onClick={() => {
                       onClose();
                     }}
@@ -169,6 +194,7 @@ const DetailCardUpd = () => {
           </div>
         </div>
       </div>
+        }
     </div>
   );
 };

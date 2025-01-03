@@ -21,6 +21,9 @@
   .about-h1 {
     font-size: 3.5em;
   }
+  .about-h2 {
+    font-size: 2.5em;
+  }
   @media (max-width: 1200px) {
     .aboutContainer {
       min-width: 80%;
@@ -33,7 +36,9 @@
       max-width: 95%;
     }
     .about-h1 {
-        font-size: 2.5em;
-        
+        font-size: 2.5em; 
+      }
+      .about-h2 {
+        font-size: 1.5em;
       }
   }

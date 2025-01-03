@@ -1,13 +1,16 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getProductById } from "../../../redux/actions";
+import { getProductById, getStoredImgs } from "../../../redux/actions";
 import { updateProduct } from "../../../utils/productEndPoints";
 import showConfirmationDialog from "../../../Auth/generalComponents/sweetAlert";
 import { Form } from "react-bootstrap";
-import "./productstyle.css";
+import * as Ad from "../../../views/AdminViews/AdminIndex"
+//import "./productstyle.css";
 import ImageUploader from "../../../utils/ImageUploader";
 import ImageSelector from "../../../utils/ImageSelector";
+import Loading from "../../Loading";
+import * as Inf from '../../../infoHelpers'
 
 const ProductEdition = () => {
   const dispatch = useDispatch();
@@ -15,12 +18,16 @@ const ProductEdition = () => {
   const { id } = useParams();
   const page = useSelector((state) => state.ProductId);
   const [imgUrl, setImgUrl] = useState(false)
+  const [load, setLoad] = useState(false)
+
   useEffect(() => {
     dispatch(getProductById(id));
+    dispatch(getStoredImgs())
   }, [id]);
 
   const onClose = () => {
     navigate(-1);
+    setLoad(false)
   };
 
   const [product, setProduct] = useState({
@@ -92,10 +99,14 @@ const ProductEdition = () => {
     if (confirmed) {
       // Si el usuario hace clic en "Aceptar", ejecutar la funcion:
       await updateProduct(id, product, onClose);
+      setLoad(true)
     }
   };
   return (
     <div className="imageBack">
+      {load?
+      <Loading/>
+      :
       <div className="coverBack">
         <div className="container-md modal-content colorBack formProductContainer rounded-4 shadow">
           <div className="container mt-5">
@@ -144,6 +155,7 @@ const ProductEdition = () => {
                   <label htmlFor="info_header" className="form-label">
                     Info posicionamiento:
                   </label>
+                  <Ad.InfoFormField action={'hover'} info={Inf.aboutSeo}/>
                   <textarea
                     className="form-control"
                     type="text"
@@ -179,8 +191,8 @@ const ProductEdition = () => {
                     value={product.enable ? "true" : "false"}
                     onChange={handleInputChange}
                   >
-                    <option value="true">True</option>
-                    <option value="false">False</option>
+                    <option value="true">Mostrar</option>
+                    <option value="false">No mostrar</option>
                   </select>
                  </div>
                  <div className="mb-3 form-check form-switch">
@@ -194,7 +206,7 @@ const ProductEdition = () => {
                 </div>
                 <div className="d-flex flex-row me-3">
                   <button
-                    className="btn btn-primary mb-3 me-2"
+                    className="btn btn-md btn-primary mb-3 me-2"
                     type="button"
                     id="submitButton"
                     onClick={handleSubmit}
@@ -202,7 +214,7 @@ const ProductEdition = () => {
                     Actualizar
                   </button>
                   <button
-                    className="btn btn-primary mb-3"
+                    className="btn btn-md btn-secondary mb-3"
                     onClick={() => {
                       onClose();
                     }}
@@ -214,6 +226,7 @@ const ProductEdition = () => {
           </div>
         </div>
       </div>
+        }
     </div>
   );
 };

@@ -12,7 +12,7 @@ function AlertLogout({logout}) {
     navigate("/");
     setTimeout(() => {
       logout();
-    }, 1500);
+    }, 1000);
   };
 
   return (

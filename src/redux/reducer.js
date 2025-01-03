@@ -1,5 +1,6 @@
 import {
     LANDING,
+    LANDING_BY_ID,
     PRODUCT,
     PRODUCT_BY_ID,
     CLEAN_STATE,
@@ -9,12 +10,15 @@ import {
     IMAGES,
     WORKS,
     WORK_BY_ID,
-    ABOUT
+    MEDIA,
+    MEDIA_AD,
+    MEDIA_BY_ID
 
 } from './actions'
 
 const initialState = {
     Landing:[],
+    LandingById: [],
     Products:[],
     ProductId:[],
     Item:[],
@@ -23,7 +27,9 @@ const initialState = {
     Images : [],
     Works : [],
     WorkById: [],
-    About: [],
+    Media: [],
+    MediaAd:[],
+    MediaById:[],
 
 }
 
@@ -33,6 +39,11 @@ const reducer = (state = initialState, {type, payload})=>{
             return {
                 ...state,
                 Landing: payload,
+            }
+        case LANDING_BY_ID:
+            return {
+                ...state,
+                LandingById: payload,
             }
         case PRODUCT:
             return {
@@ -62,10 +73,13 @@ const reducer = (state = initialState, {type, payload})=>{
         case CLEAN_STATE:
             return {
                 ...state,
-                Item:payload,
-                ProductId:payload,
-                UserById: payload,
-                WorkById : payload,
+                Item: [],
+                ProductId:[],
+                UserById: [],
+                WorkById : [],
+                LandingById : [],
+                MediaAd: [],
+                MediaById:[]
             }
         case IMAGES:
             return {
@@ -82,11 +96,21 @@ const reducer = (state = initialState, {type, payload})=>{
                 ...state,
                 WorkById : payload,
             }
-        case ABOUT:
+        case MEDIA:
             return {
                 ...state,
-                About: payload,
+                Media: payload,
             }
+        case MEDIA_AD:
+            return {
+                ...state,
+                MediaAd: payload,
+            }
+            case MEDIA_BY_ID:
+                return {
+                    ...state,
+                    MediaById: payload,
+                }
         default:
             return {
                 ...state,

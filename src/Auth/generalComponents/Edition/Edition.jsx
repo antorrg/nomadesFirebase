@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, forwardRef } from 'react';
 import style from './Edition.module.css';
 import { useAuth } from '../../AuthContext/AuthContext';
 
-const Edition = forwardRef(({ allowedRoles, userEditId, text, onClick, className }, ref) => {
+const Edition = forwardRef(({ allowedRoles, userEditId, text, onClick, className, disabled }, ref) => {
   const customClass = className || style.button;
   const { user } = useAuth();
   const [isAllowed, setIsAllowed] = useState(false);
@@ -26,7 +26,7 @@ const Edition = forwardRef(({ allowedRoles, userEditId, text, onClick, className
 
   if (!isAllowed) return null;
 
-  return <button ref={ref} onClick={onClick} className={customClass}>{text}</button>;
+  return <button ref={ref} onClick={onClick} className={customClass} disabled={disabled}>{text}</button>;
 });
 
 Edition.displayName = 'Edition';

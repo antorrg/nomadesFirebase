@@ -7,6 +7,7 @@ import Login from './Login'
 import Admin from './Admin'
 import Error from './Error'
 import OurWork from './OurWork'
+import Videos from './Videos'
 
 export {
     About,
@@ -17,5 +18,6 @@ export {
     Landing,
     Login,
     Error,
-    OurWork
+    OurWork,
+    Videos
 }

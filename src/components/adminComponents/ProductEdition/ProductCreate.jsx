@@ -3,17 +3,30 @@ import { useNavigate } from "react-router-dom";
 import GenericButton from "../../../Auth/generalComponents/GenericButton/GenericButton";
 import showConfirmationDialog from "../../../Auth/generalComponents/sweetAlert";
 import ImageUploader from "../../../utils/ImageUploader";
+import ImageSelector from "../../../utils/ImageSelector";
+import InfoFormField from "../../../views/AdminViews/InfoFormField"
+import Loading from "../../Loading";
+import {createItemProd, aboutSeo} from '../../../infoHelpers'
+import { Form } from "react-bootstrap";
 import { createProduct } from "../../../utils/productEndPoints";
-import "./productstyle.css";
+//import "./productstyle.css";
 
 const ProductCreate = () => {
+  const [load, setLoad] = useState(false)
   const navigate = useNavigate();
-  const onClose = () => navigate("/admin");
+  const [imgUrl, setImgUrl] = useState(false)
+
+  const onClose = () => {
+    setLoad(false)
+    navigate(-1)
+  };
+
   const [product, setProduct] = useState({
     title: "",
     landing: "",
     info_header: "",
     info_body: "",
+    useImg: false,
     items: [{ img: "", text: "" }],
   });
 
@@ -63,24 +76,50 @@ const ProductCreate = () => {
     }));
   };
 
+  const handleImgUrlSwitchChange = () => {
+    setImgUrl(prev => {
+      const newValue = !prev; // Invertir el estado actual de imgUrl
+  
+      // Actualizar useImg según el nuevo valor de imgUrl
+      setProduct(prevProduct => ({
+        ...prevProduct,
+        useImg: newValue, // Establecer useImg en true o false
+      }));
+  
+      return newValue; // Retornar el nuevo valor de imgUrl
+    });
+  };
   const handleSubmit = async () => {
     const confirmed = await showConfirmationDialog(
       "¿Está seguro de crear el producto?"
     );
     if (confirmed) {
       // Aquí iría la lógica para crear el producto
-      console.log(product)
+      //console.log(product)
       createProduct(product, onClose);
+      setLoad(true)
     }
   };
-
+  const permit = !product.title.trim()||
+                !product.info_body.trim()||
+                !product.info_header.trim()||
+                !product.items[0].text.trim();
+  
   return (
     <div className="imageBack">
+      {load?
+      <Loading/>
+      :
       <div className="coverBack">
         <div className="container-md modal-content colorBack formProductContainer rounded-4 shadow">
           <div className="container mt-5">
             <h3>Creación de Producto: </h3>
             <section className="needs-validation" id="updateForm" noValidate>
+              {imgUrl ?
+                <div className="col-md-6 mb-3">
+                  <ImageSelector onImageSelect={handleImageChange}/>
+                </div>
+                :
               <div className="col-md-6 mb-3">
                 <ImageUploader
                   titleField="Imagen principal:"
@@ -88,6 +127,16 @@ const ProductCreate = () => {
                   onImageUpload={(url) => handleImageChange("landing", url)}
                 />
               </div>
+                }
+              <div className="mb-3 form-check form-switch">
+                    <Form.Check 
+                      type="switch"
+                      id="imgUrlSwitch"
+                      checked={imgUrl}
+                      label="Active para elegir imagen guardada"
+                      onChange={handleImgUrlSwitchChange}
+                    />
+                </div>
               <div className="mb-3">
                 <label htmlFor="title" className="form-label">
                   Título:
@@ -106,6 +155,7 @@ const ProductCreate = () => {
                 <label htmlFor="info_header" className="form-label">
                   Info posicionamiento:
                 </label>
+                <InfoFormField info={aboutSeo} place={'bottom'}/>
                 <textarea
                   className="form-control"
                   id="info_header"
@@ -129,7 +179,10 @@ const ProductCreate = () => {
                 />
               </div>
               <div>
+                <div className="d-flex justify-content-start align-items-center">
                 <h4>Items:</h4>
+                <InfoFormField info={createItemProd} place={'bottom'}/>
+                </div>
                 {product.items.map((item, index) => (
                   <div key={index}>
                     <div>
@@ -171,21 +224,23 @@ const ProductCreate = () => {
                   buttonText="Agregar Item"
                 />
                 <GenericButton
-                  className="btn btn-secondary mb-3 me-2"
+                  className="btn btn-md btn-secondary mb-3 me-2"
                   buttonText="Cancelar"
                   onClick={onClose}
                 />
                 <GenericButton
-                  className="btn btn-primary mb-3 me-2"
+                  className="btn btn-md btn-primary mb-3 me-2"
                   type="button"
                   onClick={handleSubmit}
-                  buttonText="Enviar"
+                  buttonText="Crear"
+                  disabled={permit}
                 />
               </div>
             </section>
           </div>
         </div>
       </div>
+        }
     </div>
   );
 };

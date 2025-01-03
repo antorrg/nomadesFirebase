@@ -14,7 +14,7 @@ const MyCarousel = ({ info }) => {
             alt={item.title}
           />
           <Carousel.Caption className='carousel-caption'>
-            <h3>{item.title}</h3>
+            <h2 className='h3'>{item.title}</h2>
             <p>{item.infoHeader}</p>
             <p>
               <a className="btn btn-lg btn-ligth fw-bold border-white bg-white" href={`/detalle/${item.id}`} rel="noreferrer">

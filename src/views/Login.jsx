@@ -4,8 +4,8 @@ import {useNavigate}from "react-router-dom" ;
 import { ValidLogin } from '../Auth/generalComponents/internalUtils/Validate';
 import {loginUser} from '../Auth/authHelpers/Auth'
 import AlertLogin from '../components/AlertLogin'
-import './styles/login.css'
-import './styles/forms.css'
+//import './styles/login.css'
+//import './styles/forms.css'
 
 const Login = () => {
   const navigate = useNavigate()

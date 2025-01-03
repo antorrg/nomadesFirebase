@@ -15,12 +15,12 @@ const ProductComp = () => {
   const items = response.items;
   const { id } = useParams();
   const goBack = ()=>navigate(-1)
-
+  const isAdmin = true
   useEffect(() => {
     if (id) {
-      dispatch(getProductById(id));
+      dispatch(getProductById(id, isAdmin));
     } else {
-      dispatch(getProduct());
+      dispatch(getProduct(isAdmin));
     }
   }, [id]);
   //console

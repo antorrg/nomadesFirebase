@@ -4,7 +4,7 @@ import {
   showSuccess,
   showError,
 } from "../generalComponents/HandlerError";
-import setAuthHeader from "../generalComponents/axiosUtils";
+import {setAuthHeader} from "../generalComponents/axiosUtils";
 
 export async function upgradeUser(userId, user, onClose) {
   try {

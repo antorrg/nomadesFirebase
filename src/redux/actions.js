@@ -1,8 +1,9 @@
 import axios from "axios";
-import setAuthHeader from "../Auth/generalComponents/axiosUtils";
+import {setAuthHeader, adminValidator} from "../Auth/generalComponents/axiosUtils";
 import { HandlError } from "../Auth/generalComponents/HandlerError";
 
 export const LANDING = "LANDING";
+export const LANDING_BY_ID = 'LANDING_BY_ID';
 export const PRODUCT = "PRODUCT";
 export const PRODUCT_BY_ID = "PRODUCT_BY_ID";
 export const ITEM = "ITEM";
@@ -13,14 +14,16 @@ export const IMAGES = "IMAGES";
 export const WORKS = "WORKS";
 export const WORK_BY_ID = "WORK_BY_ID";
 export const ABOUT = "ABOUT";
-
-    
+export const MEDIA = 'MEDIA';
+export const MEDIA_AD = 'MEDIA_AD';
+export const MEDIA_BY_ID = 'MEDIA_BY_ID'
+   
 
 //*%%%%%%% Rutas libres %%%%%%%%
-export const getInfo = () => {
+export const getInfo = (isAdmin) => {
   return async (dispatch) => {
     try {
-      const data = await axios("/api/v1/land");
+      const data = await axios("/api/v1/land", adminValidator(isAdmin));
       return dispatch({
         type: LANDING,
         payload: data.data,
@@ -30,10 +33,24 @@ export const getInfo = () => {
     }
   };
 };
-export const getProduct = () => {
+export const getInfoById = (id) => {
   return async (dispatch) => {
     try {
-      const data = await axios("/api/v1/product");
+      const data = await axios(`/api/v1/land/${id}`, setAuthHeader());
+      return dispatch({
+        type: LANDING_BY_ID,
+        payload: data.data,
+      });
+    } catch (error) {
+      HandlError(error) 
+      console.error(error);
+    }
+  };
+};
+export const getProduct = (isAdmin) => {
+  return async (dispatch) => {
+    try {
+      const data = await axios("/api/v1/product", adminValidator(isAdmin));
       return dispatch({
         type: PRODUCT,
         payload: data.data,
@@ -45,10 +62,25 @@ export const getProduct = () => {
   };
 };
 
-export const getProductById = (id) => {
+export const getMedia = ()=>{
+  return async (dispatch)=>{
+    try {
+      const data = await axios(`/api/v1/media/videos`);
+      return dispatch({
+        type: MEDIA,
+        payload: data.data,
+      });
+    } catch (error) {
+      HandlError(error) 
+      console.error(error);
+    }
+  }
+}
+
+export const getProductById = (id, isAdmin) => {
   return async (dispatch) => {
     try {
-      const data = await axios(`/api/v1/product/${id}`);
+      const data = await axios(`/api/v1/product/${id}`, adminValidator(isAdmin));
       return dispatch({
         type: PRODUCT_BY_ID,
         payload: data.data,
@@ -59,10 +91,10 @@ export const getProductById = (id) => {
     }
   };
 };
-export const getItem = (id) => {
+export const getItem = (id, isAdmin) => {
   return async (dispatch) => {
     try {
-      const data = await axios(`/api/v1/product/item/${id}`);
+      const data = await axios(`/api/v1/product/item/${id}`, adminValidator(isAdmin));
       return dispatch({
         type: ITEM,
         payload: data.data,
@@ -80,12 +112,26 @@ export const cleanState = () => {
   };
 };
 
-export const getWorks = () => {
+export const getWorks = (isAdmin) => {
   return async (dispatch) => {
     try {
-      const data = await axios("/api/v1/work");
+      const data = await axios("/api/v1/work", adminValidator(isAdmin));
       return dispatch({
         type: WORKS,
+        payload: data.data,
+      });
+    } catch (error) {
+      HandlError(error) 
+      console.error(error);
+    }
+  };
+};
+export const getWorkById = (id) => {
+  return async (dispatch) => {
+    try {
+      const data = await axios(`/api/v1/work/${id}`, setAuthHeader());
+      return dispatch({
+        type: WORK_BY_ID,
         payload: data.data,
       });
     } catch (error) {
@@ -135,12 +181,26 @@ export const getStoredImgs = () => {
   };
 };
 
-export const getWorkById = (id) => {
+export const getAdminMedia = ()=>{
+  return async (dispatch)=>{
+    try {
+      const data = await axios(`/api/v1/media/admin/videos`, setAuthHeader());
+      return dispatch({
+        type: MEDIA_AD,
+        payload: data.data,
+      });
+    } catch (error) {
+      HandlError(error) 
+      console.error(error);
+    }
+  }
+};
+export const getMediaById = (id) => {
   return async (dispatch) => {
     try {
-      const data = await axios(`/api/v1/work/${id}`, setAuthHeader());
+      const data = await axios(`/api/v1/media/videos/${id}`, setAuthHeader());
       return dispatch({
-        type: WORK_BY_ID,
+        type: MEDIA_BY_ID,
         payload: data.data,
       });
     } catch (error) {

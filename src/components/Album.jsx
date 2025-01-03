@@ -1,7 +1,10 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Album = ({ info, items }) => {
-  
+ const navigate = useNavigate()
+ 
+
+ 
  
  
 
@@ -18,7 +21,7 @@ const Album = ({ info, items }) => {
                   style={{ maxWidth: "22rem" }}
                 />
             <p className="lead text-muted">{info?.infoBody}</p>
-            <Link className="btn btn-secondary my-2" to="/">
+            <Link className="btn btn-md btn-outline-darkgray my-2" to="/">
               Volver
             </Link>
           </div>
@@ -28,16 +31,16 @@ const Album = ({ info, items }) => {
         <div className="container">
           <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
             {items?.map((item) => (
-                 <div className="col">
+                 <div key={item.id} className="col">
                  <div className="card shadow-sm">
                    <img className="card-img-top" src={item.img} alt="Card image" />
                    <div className="card-body">
                      <p className="card-text">{item.text}</p>
                      <div className="d-flex justify-content-between align-items-center">
                        <div className="btn-group">
-                         <Link className="btn btn-sm btn-outline-secondary me-3" to={`/detalle/item/${item.id}`}>
+                         <button className="btn btn-sm btn-outline-darkgray me-3" onClick={()=>navigate(`/detalle/item/${item.id}`)} disabled={item.id===0? true : false}>
                            Ver mas
-                         </Link>
+                         </button>
                        </div>
                      </div>
                    </div>

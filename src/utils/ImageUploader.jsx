@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { showSuccess, showError } from "../Auth/generalComponents/HandlerError";
+import InfoFormField from '../views/AdminViews/InfoFormField'
+import {imageUpladmessage} from '../infoHelpers'
 
 const ImageUploader = ({ titleField, imageValue, onImageUpload }) => {
   const [file, setFile] = useState(null);
@@ -63,7 +65,10 @@ const ImageUploader = ({ titleField, imageValue, onImageUpload }) => {
     <div className="row">
       <div className="co-md-8 mb-3 me2">
         <section>
+          <div className="d-flex justify-content-start align-items-center">
           <label className="form-label">{titleField}</label>
+          <InfoFormField info={imageUpladmessage} place={'bottom'} action={'hover'}/>
+          </div>
           <input
             type="file"
             className="form-control"
