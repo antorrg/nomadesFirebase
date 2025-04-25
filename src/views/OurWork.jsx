@@ -1,13 +1,13 @@
 import {useEffect} from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import { Helmet } from 'react-helmet-async';
-import {getWorks, getInfo} from '../redux/actions'
+import {getLanding, getPubworks} from '../redux/actions'
 import {Header} from '../components/IndexComponents'
 
 const OurWork = () => {
   const dispatch = useDispatch();
-  const featurettes = useSelector((state) => state.Works);
-  const info = useSelector((state)=>state.Landing)
+  const featurettes = useSelector((state) => state.WorksPublic);
+  const info = useSelector((state)=>state.LandingPublic)
   
  
   
@@ -15,8 +15,8 @@ const OurWork = () => {
   const featurettesToShow = featurettes.filter(item => item.enable);
   
   useEffect(()=>{
-    dispatch(getInfo())
-    dispatch(getWorks())
+    dispatch(getLanding())
+    dispatch(getPubworks())
   },[])
 
   return (

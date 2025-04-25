@@ -2,13 +2,27 @@
 import {useState} from 'react'
 import {useNavigate} from 'react-router-dom'
 import {Header} from '../components/IndexComponents'
-import { ValidContact } from '../Auth/generalComponents/internalUtils/Validate'
-import showConfirmationDialog from '../Auth/generalComponents/sweetAlert'
-import { sendEmail } from '../utils/landingPageEndpoints'
+import { ValidContact } from '../utils/Validate'
+import showConfirmationDialog from '../Endpoints/sweetAlert'
+import MailReject from '../components/MailReject'
+import { sendEmails } from '../Endpoints/publicEndpoints'
 
 const Contact = () => {
 const navigate = useNavigate()
-const onClose = ()=>navigate(-1)
+const [load, setLoad ] = useState(false)
+const [isReject, setIsReject] = useState(false)
+const onClose = ()=>{
+  setLoad(false)
+  navigate(-1)
+}
+const onReject = ()=>{
+  setLoad(false)
+  setIsReject(true)
+  setTimeout(()=>{
+    setIsReject(false)
+  },60000)
+}
+const retry = ()=> setIsReject(false)
 
 const [input, setInput] = useState({
   email : "",
@@ -37,8 +51,9 @@ const [error, setError] = useState({
     );
     if (confirmed) {
       // Aquí iría la lógica para crear el producto
-      await sendEmail(input, onClose);
-      console.log("Formulario enviado", input);
+      setLoad(true)
+      await sendEmails(input, onClose, onReject);
+      //console.log("Formulario enviado", input);
     }
   } else {
     setError(validationErrors); // Muestra los errores si hay
@@ -65,6 +80,7 @@ const [error, setError] = useState({
     <div className="imageBack">
        <Header/>
     <div className="coverMail">
+      {!isReject?
       <div className="container-md modal-content colorBack contactContainer rounded-4 shadow">
         <div className="container mt-5">
           <h1>Contactenos:</h1>
@@ -119,6 +135,22 @@ const [error, setError] = useState({
                 {error.message && <p className="errorMsg">{error.message}</p>}
               </div>
              </div>
+             {load?
+              <div className="d-flex flex-row me-3">
+              <button className="btn btn-md btn-primary mb-3 me-2" disabled>
+                Enviando...
+              </button>
+              <button className="btn btn-md btn-outline-darkgray mb-3 me-2" >
+                <span
+                  className="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                {'  '}
+                Aguarde por favor...
+              </button>
+            </div>
+            :
               <div className="d-flex flex-row me-3">
                 <button
                   className="btn btn-md btn-primary mb-3 me-2"
@@ -146,10 +178,13 @@ const [error, setError] = useState({
                 WhatsApp
               </button>
               </div>
+            }
             </div>
           </section>
         </div>
       </div>
+      :
+      <MailReject  retry={retry}/>}
     </div>
     </div>
   )

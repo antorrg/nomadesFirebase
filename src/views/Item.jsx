@@ -1,18 +1,18 @@
 import {useEffect} from 'react'
 import {useParams, Link} from 'react-router-dom'
 import {useDispatch, useSelector} from 'react-redux'
-import {getItem, cleanState} from '../redux/actions'
+import {getPubItem, pubClean} from '../redux/actions'
 //import './styles/item.css'
 
 
 const Item = () => { 
   const dispatch = useDispatch()
-  const item = useSelector((state)=>state.Item)
+  const item = useSelector((state)=>state.ItemPublic)
   const {id}=useParams()
   
   useEffect(()=>{
-    dispatch(getItem(id))
-    return ()=>{dispatch(cleanState())}
+    dispatch(getPubItem(id))
+    return ()=>{dispatch(pubClean())}
   },[id])
 
   return (

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { HandlError } from './Auth/generalComponents/HandlerError';
+import { HandlError } from './Endpoints/mainFunctions/HandlerError';
 
 
 const interceptor = (logout, redirectToError) => {

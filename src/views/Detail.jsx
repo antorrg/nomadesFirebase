@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import {Helmet} from 'react-helmet-async'
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
-import { getProductById} from "../redux/actions";
+import { getProductDetail} from "../redux/actions";
 import * as Cmt from "../components/IndexComponents";
 
 const Detail = () => {
   const dispatch = useDispatch();
-  const response = useSelector((state) => state.ProductId);
+  const response = useSelector((state) => state.ProductIdPublic);
   const info = response.info;
   const items = response.items;
   const { id } = useParams();
@@ -16,7 +16,7 @@ const Detail = () => {
   const headerDescription = info? info.infoHeader : 'Descripcion del producto'
    
   useEffect(() => {
-    dispatch(getProductById(id));
+    dispatch(getProductDetail(id));
    
   }, [id, dispatch]);
   return (

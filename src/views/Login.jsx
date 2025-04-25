@@ -1,19 +1,27 @@
 import {useState} from 'react'
-import {useAuth} from '../Auth/AuthContext/AuthContext'
+import {useAuth} from '../Auth/AuthContext'
 import {useNavigate}from "react-router-dom" ;
-import { ValidLogin } from '../Auth/generalComponents/internalUtils/Validate';
-import {loginUser} from '../Auth/authHelpers/Auth'
+import { ValidLogin } from '../utils/Validate';
+import {loginUser} from '../Endpoints/endpoints'
 import AlertLogin from '../components/AlertLogin'
+import Loading from '../components/Loading'
 //import './styles/login.css'
 //import './styles/forms.css'
 
 const Login = () => {
   const navigate = useNavigate()
   const {login, authenticated, logout}=useAuth();
+  const [load, setLoad]= useState(false)
   const [showPassword, setShowPassword]= useState(false)
 
   const closeLogin = ()=>{navigate('/')}
-  const succesLogin = ()=>{navigate('/admin')}
+  const succesLogin = ()=>{
+    setLoad(false)
+    navigate('/admin')
+  }
+  const loginReject = ()=>{
+    setLoad(false)
+  }
 
   const [input, setInput] = useState({
     email: "",
@@ -39,8 +47,17 @@ const Login = () => {
   
   const handleSubmit = async(event)=>{
     event.preventDefault();
+    setLoad(true)
+    try {
+      const response = await loginUser(input,null, loginReject);
+      console.log(response)
+        const user = response.user;
+        login(user);
+        succesLogin()
+    } catch (error) {
+      console.error(error)
+    }
     
-    await loginUser(input,login, succesLogin);
     setInput({
       email: "",
       password: "",
@@ -54,6 +71,9 @@ const Login = () => {
   <div className="imageBack">
     <div className='coverBack'>
       <div className="container-md modal-content colorBack loginContainer rounded-4 shadow">
+        {load?
+        <Loading/>
+        :
         <div className="form-signin m-auto p-3">
           {authenticated?
           <AlertLogin logout={logout}/>
@@ -84,6 +104,7 @@ const Login = () => {
           </section>
                   }
         </div>
+        }
       </div>
     </div>
   </div>

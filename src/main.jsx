@@ -8,7 +8,7 @@ import axios from "axios";
 import { BrowserRouter } from "react-router-dom";
 import { Provider as ReduxProvider } from "react-redux";
 import store from "./redux/store.js";
-import { AuthProvider } from "./Auth/AuthContext/AuthContext.jsx";
+import { AuthProvider } from "./Auth/AuthContext.jsx";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App.jsx";
 import "./index.css";

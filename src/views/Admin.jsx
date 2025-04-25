@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
 //import "./styles/admin.css";
-import * as Main from "./AdminViews/AdminIndex";
-import {useAuth} from '../Auth/AuthContext/AuthContext'
-import SessionWarning from "../Auth/AuthContext/SessionWarning";
+import * as Main from "../components/adminComponents/AdminIndex";
+;
 
 const Admin = () => {
-  const {expirationTime}= useAuth()
+
   const [help, setHelp] = useState(false);
   //console.log('user: ', user)
 

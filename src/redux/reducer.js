@@ -1,4 +1,13 @@
 import {
+    PUB_LANDING,
+    PUB_PRODUCT,
+    PUB_PROD_ID,
+    PUB_ITEM,
+    PUB_MEDIA,
+    PUB_WORKS,
+    PUB_CLEAN,
+    CONTACT,
+//Admin
     LANDING,
     LANDING_BY_ID,
     PRODUCT,
@@ -17,17 +26,25 @@ import {
 } from './actions'
 
 const initialState = {
+    LandingPublic:[],
+    ProductsPublic:[],
+    ProductIdPublic:[],
+    ItemPublic:[],
+    MediaPublic: [],
+    WorksPublic: [],
+    contactStatus: [],
+//Protected States:
     Landing:[],
     LandingById: [],
     Products:[],
     ProductId:[],
     Item:[],
+    Media: [],
     Users:[],
     UserById: [],
     Images : [],
     Works : [],
     WorkById: [],
-    Media: [],
     MediaAd:[],
     MediaById:[],
 
@@ -35,6 +52,50 @@ const initialState = {
 
 const reducer = (state = initialState, {type, payload})=>{
     switch(type){
+    //Public cases:
+        case PUB_LANDING:
+            return {
+                ...state,
+                LandingPublic: payload,
+            }
+        case PUB_PRODUCT:
+            return {
+                ...state,
+                ProductsPublic: payload,
+            }
+        case PUB_PROD_ID:
+            return {
+                ...state,
+                ProductIdPublic:payload,
+            }
+        case PUB_ITEM:
+            return {
+                ...state,
+                ItemPublic:payload
+            }
+        case PUB_WORKS : 
+            return {
+                ...state,
+                WorksPublic: payload,
+            }
+        case PUB_MEDIA:
+            return {
+                ...state,
+                MediaPublic: payload,
+            }
+        case PUB_CLEAN:
+            return {
+                ...state,
+                ProductIdPublic: [],
+                ItemPublic:      [],
+                contactStatus: []
+            }
+        case CONTACT: 
+            return {
+                ...state,
+                contactStatus: payload
+            }      
+     //Admin cases
         case LANDING:
             return {
                 ...state,
@@ -70,17 +131,7 @@ const reducer = (state = initialState, {type, payload})=>{
                 ...state,
                 UserById: payload,
             }
-        case CLEAN_STATE:
-            return {
-                ...state,
-                Item: [],
-                ProductId:[],
-                UserById: [],
-                WorkById : [],
-                LandingById : [],
-                MediaAd: [],
-                MediaById:[]
-            }
+        
         case IMAGES:
             return {
                 ...state,
@@ -106,11 +157,22 @@ const reducer = (state = initialState, {type, payload})=>{
                 ...state,
                 MediaAd: payload,
             }
-            case MEDIA_BY_ID:
-                return {
-                    ...state,
-                    MediaById: payload,
-                }
+        case MEDIA_BY_ID:
+            return {
+                ...state,
+                MediaById: payload,
+            }
+        case CLEAN_STATE:
+            return {
+                ...state,
+                Item: [],
+                ProductId:[],
+                UserById: [],
+                WorkById : [],
+                LandingById : [],
+                MediaAd: [],
+                MediaById:[]
+            }                   
         default:
             return {
                 ...state,

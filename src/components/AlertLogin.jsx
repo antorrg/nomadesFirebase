@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
-import { showSuccess } from '../Auth/generalComponents/HandlerError';
+import { showSuccess } from '../Endpoints/mainFunctions/HandlerError';
 
 function AlertLogout({logout}) {
     const navigate = useNavigate()

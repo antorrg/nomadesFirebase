@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { showSuccess, showError } from "../Auth/generalComponents/HandlerError";
-import InfoFormField from '../views/AdminViews/InfoFormField'
-import {imageUpladmessage} from '../infoHelpers'
+import { showSuccess, showError } from "../Endpoints/mainFunctions/HandlerError";
+import InfoFormField from "../components/adminComponents/InfoFormField";
+import { imageUpladmessage } from "../infoHelpers";
 
 const ImageUploader = ({ titleField, imageValue, onImageUpload }) => {
   const [file, setFile] = useState(null);
   const [imageUrl, setImageUrl] = useState(imageValue || ""); // Inicializa con imageValue
   const [previewUrl, setPreviewUrl] = useState(imageValue || ""); // Inicializa con imageValue
-  const [ alert, setAlert ] = useState(false);
+  const [alert, setAlert] = useState(false);
 
   // Actualiza previewUrl si el prop imageValue cambia
   useEffect(() => {
@@ -66,8 +66,12 @@ const ImageUploader = ({ titleField, imageValue, onImageUpload }) => {
       <div className="co-md-8 mb-3 me2">
         <section>
           <div className="d-flex justify-content-start align-items-center">
-          <label className="form-label">{titleField}</label>
-          <InfoFormField info={imageUpladmessage} place={'bottom'} action={'hover'}/>
+            <label className="form-label">{titleField}</label>
+            <InfoFormField
+              info={imageUpladmessage}
+              place={"bottom"}
+              action={"hover"}
+            />
           </div>
           <input
             type="file"

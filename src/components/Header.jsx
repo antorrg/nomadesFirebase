@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useAuth } from "../Auth/AuthContext/AuthContext";
+import { useAuth } from "../Auth/AuthContext";
 
 const Header = ({ theme, toggleTheme }) => {
   const { authenticated, logout } = useAuth();

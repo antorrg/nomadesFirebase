@@ -1,38 +1,43 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getItem } from "../../../../redux/actions";
-import { updateItem } from "../../../../utils/productEndPoints";
 import { Form } from "react-bootstrap";
-import showConfirmationDialog from "../../../../Auth/generalComponents/sweetAlert";
+import { getItem } from "../../../../redux/actions";
+import { updateItem } from "../../../../Endpoints/endpoints";
+import showConfirmationDialog from "../../../../Endpoints/sweetAlert";
 //import "./detailCardUpd.css";
 import ImageUploader from "../../../../utils/ImageUploader";
 import ImageSelector from "../../../../utils/ImageSelector";
 import Loading from "../../../Loading";
-import InfoFormField from "../../../../views/AdminViews/InfoFormField";
+
 
 const DetailCardUpd = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
-  const [load, setLoad] = useState(false)
+  const [load, setLoad] = useState(false);
 
-  const [imgUrl, setImgUrl] = useState(false)
+  const [imgUrl, setImgUrl] = useState(false);
   const item1 = useSelector((state) => state.Item);
+
   useEffect(() => {
     dispatch(getItem(id));
   }, [id]);
 
   const onClose = () => {
-    setLoad(false)
-      navigate(-1);
-    
+    setLoad(false);
+    navigate(-1);
+  };
+  const onRetry = () => {
+    setTimeout(() => {
+      onClose();
+    }, 3000);
   };
 
   const [item, setItem] = useState({
     text: "",
     img: "",
-    enable:false,
+    enable: false,
     saver: false,
     useImg: false,
   });
@@ -42,7 +47,7 @@ const DetailCardUpd = () => {
       setItem({
         text: item1.text || "",
         img: item1.img || "",
-        enable:item1.enable || false,
+        enable: item1.enable || false,
         saver: item1.saver || false,
         useImg: item1.useImg || false,
       });
@@ -71,19 +76,18 @@ const DetailCardUpd = () => {
     }));
   };
   const handleImgUrlSwitchChange = () => {
-    setImgUrl(prev => {
+    setImgUrl((prev) => {
       const newValue = !prev; // Invertir el estado actual de imgUrl
-  
+
       // Actualizar useImg según el nuevo valor de imgUrl
-      setItem(prevItem => ({
+      setItem((prevItem) => ({
         ...prevItem,
         useImg: newValue, // Establecer useImg en true o false
       }));
-  
+
       return newValue; // Retornar el nuevo valor de imgUrl
     });
   };
-  
 
   const handleSubmit = async () => {
     // Lógica para actualizar el producto
@@ -92,63 +96,62 @@ const DetailCardUpd = () => {
     );
     if (confirmed) {
       // Si el usuario hace clic en "Aceptar", ejecutar la funcion:
-      await updateItem(id, item, onClose);
-      setLoad(true)
-      
+      await updateItem(id, item, onClose, onRetry);
+      setLoad(true);
     }
   };
   return (
     <div className="imageBack">
-      {load?
-      <Loading/>
-      :
-      <div className="coverBack">
-        <div className="container-md modal-content colorBack formProductContainer rounded-4 shadow">
-          <div className="container mt-5">
-            <h1>Actualizacion de item</h1>
-            <section
-              className="needs-validation"
-              id="updateItemForm"
-              noValidate
-            >
-              <div className="row">
-              {imgUrl ?
-              <div className="col-md-6 mb-3">
-                  <ImageSelector onImageSelect={handleImageChange}/>
-                </div>
-                :
-                <div className="col-md-6 mb-3">
-                  <ImageUploader
-                    titleField={"Imagen:"}
-                    imageValue={item.img}
-                    onImageUpload={handleImageChange}
-                  />
-                </div>
-                }
-                <div className="mb-3 form-check form-switch">
-                    <Form.Check 
+      {load ? (
+        <Loading />
+      ) : (
+        <div className="coverBack">
+          <div className="container-md modal-content colorBack formProductContainer rounded-4 shadow">
+            <div className="container mt-5">
+              <h1>Actualizacion de item</h1>
+              <section
+                className="needs-validation"
+                id="updateItemForm"
+                noValidate
+              >
+                <div className="row">
+                  {imgUrl ? (
+                    <div className="col-md-6 mb-3">
+                      <ImageSelector onImageSelect={handleImageChange} />
+                    </div>
+                  ) : (
+                    <div className="col-md-6 mb-3">
+                      <ImageUploader
+                        titleField={"Imagen:"}
+                        imageValue={item.img}
+                        onImageUpload={handleImageChange}
+                      />
+                    </div>
+                  )}
+                  <div className="mb-3 form-check form-switch">
+                    <Form.Check
                       type="switch"
                       id="imgUrlSwitch"
                       checked={imgUrl}
                       label="Active para elegir imagen guardada"
                       onChange={handleImgUrlSwitchChange}
                     />
-                </div>
-                <div className="col-md-6 mb-3"></div>
-                <div className="mb-3">
-                  <label htmlFor="text" className="form-label">
-                    Texto:
-                  </label>
-                  <textarea
-                    className="form-control"
-                    type="text"
-                    id="text"
-                    name="text"
-                    value={item.text}
-                    onChange={handleInputChange}
-                  />
-                </div>
-                <label htmlFor="enable" className="form-label">
+                  </div>
+                  <div className="col-md-6 mb-3"></div>
+                  <div className="mb-3">
+                    <label htmlFor="text" className="form-label">
+                      Texto:
+                    </label>
+                    <textarea
+                      className="form-control"
+                      type="text"
+                      id="text"
+                      name="text"
+                      value={item.text}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                  <label htmlFor="enable" className="form-label">
                     Mostrar al publico
                   </label>
                   <select
@@ -161,40 +164,40 @@ const DetailCardUpd = () => {
                     <option value="true">Mostrar</option>
                     <option value="false">No mostrar</option>
                   </select>
-                <div className="mb-3 form-check form-switch">
-                    <Form.Check 
+                  <div className="mb-3 form-check form-switch">
+                    <Form.Check
                       type="switch"
                       id="saver"
                       checked={item.saver}
                       label="Active para conservar imagen antigua"
                       onChange={handleSwitchChange}
                     />
-                </div>
+                  </div>
 
-                <div className="d-flex flex-row me-3">
-                  <button
-                    className="btn btn-md btn-primary mb-3 me-2"
-                    type="button"
-                    id="submitButton"
-                    onClick={handleSubmit}
-                  >
-                    Actualizar
-                  </button>
-                  <button
-                    className="btn btn-md btn-secondary mb-3"
-                    onClick={() => {
-                      onClose();
-                    }}
-                  >
-                    Cancelar
-                  </button>
+                  <div className="d-flex flex-row me-3">
+                    <button
+                      className="btn btn-md btn-primary mb-3 me-2"
+                      type="button"
+                      id="submitButton"
+                      onClick={handleSubmit}
+                    >
+                      Actualizar
+                    </button>
+                    <button
+                      className="btn btn-md btn-secondary mb-3"
+                      onClick={() => {
+                        onClose();
+                      }}
+                    >
+                      Cancelar
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </section>
+              </section>
+            </div>
           </div>
         </div>
-      </div>
-        }
+      )}
     </div>
   );
 };

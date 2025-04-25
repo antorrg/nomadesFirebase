@@ -1,9 +1,29 @@
 import axios from "axios";
-import {setAuthHeader, adminValidator} from "../Auth/generalComponents/axiosUtils";
-import { HandlError } from "../Auth/generalComponents/HandlerError";
+//import pepe from '../api/services/service'
+//import { setAuthHeader, adminValidator } from "../Endpoints/mainFunctions/axiosUtils";
+import { HandlError } from "../Endpoints/mainFunctions/HandlerError";
+import {
+  pbLanding,
+  pbProduct,
+  pbProductId,
+  pbItem,
+  pbMedia,
+  pbWorks
+} from '../Endpoints/publicEndpoints'
 
+//Public variables
+export const PUB_LANDING = 'PUB_LANDING';
+export const PUB_PRODUCT = 'PUB_PRODUCT'
+export const PUB_PROD_ID = 'PUB_PROD_ID'
+export const PUB_ITEM  = 'PUB_ITEM'
+export const PUB_MEDIA = 'PUB_MEDIA'
+export const PUB_WORKS = 'PUB_WORKS' 
+export const PUB_CLEAN = 'PUB_CLEAN'
+export const CONTACT = 'CONTACT'
+
+//Admin Variables
 export const LANDING = "LANDING";
-export const LANDING_BY_ID = 'LANDING_BY_ID';
+export const LANDING_BY_ID = "LANDING_BY_ID";
 export const PRODUCT = "PRODUCT";
 export const PRODUCT_BY_ID = "PRODUCT_BY_ID";
 export const ITEM = "ITEM";
@@ -14,12 +34,98 @@ export const IMAGES = "IMAGES";
 export const WORKS = "WORKS";
 export const WORK_BY_ID = "WORK_BY_ID";
 export const ABOUT = "ABOUT";
-export const MEDIA = 'MEDIA';
-export const MEDIA_AD = 'MEDIA_AD';
-export const MEDIA_BY_ID = 'MEDIA_BY_ID'
-   
+export const MEDIA = "MEDIA";
+export const MEDIA_AD = "MEDIA_AD";
+export const MEDIA_BY_ID = "MEDIA_BY_ID";
 
 //*%%%%%%% Rutas libres %%%%%%%%
+/*
+pbLanding,
+pbProduct,
+pbProductId,
+pbItem,
+pbMedia,
+pbMediaById,
+pbWorks
+*/
+export const getLanding = () => {
+  return async (dispatch) => {
+    const data = await pbLanding()
+    //const data = await pepe.getLanding()
+    return dispatch({
+      type: PUB_LANDING,
+      payload: data
+    })
+  }
+}
+
+export const getProducts = () => {
+  return async (dispatch) =>{
+    const data = await pbProduct()
+    //const data = await pepe.getProduct()
+    return dispatch({
+      type: PUB_PRODUCT,
+      payload: data
+    })
+  }
+}
+
+export const getProductDetail = (id) => {
+  return async (dispatch) => {
+    const data = await pbProductId(id)
+    //const data = await pepe.getProductByid(id)
+    return dispatch({
+      type: PUB_PROD_ID,
+      payload: data
+    })
+  } 
+}
+
+export const getPubItem = (id) => {
+  return async (dispatch) => {
+    const data = await pbItem(id)
+    //const data = await pepe.getItem(id)
+    return dispatch({
+      type: PUB_ITEM,
+      payload: data
+    })
+  } 
+}
+
+export const getPubMedia = () => {
+  return async (dispatch) => {
+    const data = await pbMedia()
+    return dispatch({
+      type: PUB_MEDIA,
+      payload: data
+    })
+  } 
+}
+
+export const getPubworks = () => {
+  return async (dispatch) => {
+    const data = await pbWorks()
+    return dispatch({
+      type: PUB_WORKS,
+      payload: data
+    })
+  } 
+}
+ export const contact = (info) =>{
+  return (dispatch)=> {
+    return dispatch({
+      type: CONTACT,
+      payload:info
+    })
+  }
+ }
+export const pubClean = () => {
+  return {
+    type: PUB_CLEAN,
+    payload: [],
+  };
+};
+//*######## Rutas Protegidas ####################
 export const getInfo = (isAdmin) => {
   return async (dispatch) => {
     try {
@@ -33,20 +139,8 @@ export const getInfo = (isAdmin) => {
     }
   };
 };
-export const getInfoById = (id) => {
-  return async (dispatch) => {
-    try {
-      const data = await axios(`/api/v1/land/${id}`, setAuthHeader());
-      return dispatch({
-        type: LANDING_BY_ID,
-        payload: data.data,
-      });
-    } catch (error) {
-      HandlError(error) 
-      console.error(error);
-    }
-  };
-};
+
+
 export const getProduct = (isAdmin) => {
   return async (dispatch) => {
     try {
@@ -56,37 +150,25 @@ export const getProduct = (isAdmin) => {
         payload: data.data,
       });
     } catch (error) {
-      HandlError(error) 
+      HandlError(error);
       console.error(error);
     }
   };
 };
 
-export const getMedia = ()=>{
-  return async (dispatch)=>{
-    try {
-      const data = await axios(`/api/v1/media/videos`);
-      return dispatch({
-        type: MEDIA,
-        payload: data.data,
-      });
-    } catch (error) {
-      HandlError(error) 
-      console.error(error);
-    }
-  }
-}
-
 export const getProductById = (id, isAdmin) => {
   return async (dispatch) => {
     try {
-      const data = await axios(`/api/v1/product/${id}`, adminValidator(isAdmin));
+      const data = await axios(
+        `/api/v1/product/${id}`,
+        adminValidator(isAdmin)
+      );
       return dispatch({
         type: PRODUCT_BY_ID,
         payload: data.data,
       });
     } catch (error) {
-      HandlError(error) 
+      HandlError(error);
       console.error(error);
     }
   };
@@ -94,21 +176,32 @@ export const getProductById = (id, isAdmin) => {
 export const getItem = (id, isAdmin) => {
   return async (dispatch) => {
     try {
-      const data = await axios(`/api/v1/product/item/${id}`, adminValidator(isAdmin));
+      const data = await axios(
+        `/api/v1/product/item/${id}`,
+        adminValidator(isAdmin)
+      );
       return dispatch({
         type: ITEM,
         payload: data.data,
       });
     } catch (error) {
-      HandlError(error) 
+      HandlError(error);
       console.error(error);
     }
   };
 };
-export const cleanState = () => {
-  return {
-    type: CLEAN_STATE,
-    payload: [],
+export const getMedia = () => {
+  return async (dispatch) => {
+    try {
+      const data = await axios(`/api/v1/media/videos`);
+      return dispatch({
+        type: MEDIA,
+        payload: data.data,
+      });
+    } catch (error) {
+      HandlError(error);
+      console.error(error);
+    }
   };
 };
 
@@ -121,11 +214,27 @@ export const getWorks = (isAdmin) => {
         payload: data.data,
       });
     } catch (error) {
-      HandlError(error) 
+      HandlError(error);
       console.error(error);
     }
   };
 };
+
+export const getInfoById = (id) => {
+  return async (dispatch) => {
+    try {
+      const data = await axios(`/api/v1/land/${id}`, setAuthHeader());
+      return dispatch({
+        type: LANDING_BY_ID,
+        payload: data.data,
+      });
+    } catch (error) {
+      HandlError(error);
+      console.error(error);
+    }
+  };
+};
+
 export const getWorkById = (id) => {
   return async (dispatch) => {
     try {
@@ -135,7 +244,7 @@ export const getWorkById = (id) => {
         payload: data.data,
       });
     } catch (error) {
-      HandlError(error) 
+      HandlError(error);
       console.error(error);
     }
   };
@@ -181,8 +290,8 @@ export const getStoredImgs = () => {
   };
 };
 
-export const getAdminMedia = ()=>{
-  return async (dispatch)=>{
+export const getAdminMedia = () => {
+  return async (dispatch) => {
     try {
       const data = await axios(`/api/v1/media/admin/videos`, setAuthHeader());
       return dispatch({
@@ -190,10 +299,10 @@ export const getAdminMedia = ()=>{
         payload: data.data,
       });
     } catch (error) {
-      HandlError(error) 
+      HandlError(error);
       console.error(error);
     }
-  }
+  };
 };
 export const getMediaById = (id) => {
   return async (dispatch) => {
@@ -204,8 +313,15 @@ export const getMediaById = (id) => {
         payload: data.data,
       });
     } catch (error) {
-      HandlError(error) 
+      HandlError(error);
       console.error(error);
     }
+  };
+};
+
+export const cleanState = () => {
+  return {
+    type: CLEAN_STATE,
+    payload: [],
   };
 };

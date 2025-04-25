@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Dropdown } from 'react-bootstrap';
-import { useSelector, useDispatch} from "react-redux"; // Importamos el hook para acceder a Redux
+import { useSelector, useDispatch} from "react-redux"; 
 import { getStoredImgs} from '../redux/actions'
-import InfoFormField from '../views/AdminViews/InfoFormField'
+import InfoFormField from '../components/adminComponents/InfoFormField'
 import {imageSelector} from '../infoHelpers'
 
 

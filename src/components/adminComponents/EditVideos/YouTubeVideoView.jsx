@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Container, Row, Col, Ratio, Button } from "react-bootstrap";
-import { useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import * as Arr from "../../../utils/SlickCarousel";
-import {booleanState} from '../../../utils/generalHelpers'
-import {deleteMedia} from '../../../utils/landingPageEndpoints'
-import showConfirmationDialog from "../../../Auth/generalComponents/sweetAlert";
+import { booleanState } from "../../../utils/generalHelpers";
+import {deleteVideo } from "../../../Endpoints/endpoints"
+import showConfirmationDialog from "../../../Endpoints/sweetAlert";
 
 const YouTubeVideoView = ({ media }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const videoList = media.filter((video) => video.type === "youtube");
   let videos = videoList[0] || {
@@ -20,7 +20,7 @@ const YouTubeVideoView = ({ media }) => {
     url: "",
     enable: true,
   };
-  
+
   const [isLoading, setIsLoading] = useState(true);
   const [mainVideo, setMainVideo] = useState(videos);
 
@@ -42,16 +42,16 @@ const YouTubeVideoView = ({ media }) => {
     return match ? match[1] : null;
   };
   //Borrar video:
-  const deleteVideo = async(id)=>{
+  const delVideo = async (id) => {
     const confirmed = await showConfirmationDialog(
       "¿Está seguro de eliminar el item?"
     );
     if (confirmed) {
       // Aquí iría la lógica para actualizar el elemento
-      
-       await deleteMedia(id)
+
+      await deleteVideo(id);
     }
-  }
+  };
   return (
     <Container>
       {/* Video principal */}
@@ -61,7 +61,7 @@ const YouTubeVideoView = ({ media }) => {
             className="mt-2 me-3 w-20"
             variant="outline-primary"
             size="sm"
-            onClick={() => navigate('/admin/media/create?type=youtube')}
+            onClick={() => navigate("/admin/media/create?type=youtube")}
           >
             Crear
           </Button>
@@ -70,8 +70,8 @@ const YouTubeVideoView = ({ media }) => {
           </h2>
           <p className="lead">{mainVideo.text}</p>
           <p className="lead">
-             <strong>Estado: </strong> {booleanState(mainVideo.enable)}
-            </p>
+            <strong>Estado: </strong> {booleanState(mainVideo.enable)}
+          </p>
         </Col>
         <Col xs={12} md={7}>
           <Ratio aspectRatio="16x9">
@@ -108,7 +108,9 @@ const YouTubeVideoView = ({ media }) => {
                 className="mt-2 me-3 w-20"
                 variant="outline-primary"
                 size="sm"
-                onClick={() => navigate(`/admin/media/update/${video.id}?type=youtube`)}
+                onClick={() =>
+                  navigate(`/admin/media/update/${video.id}?type=youtube`)
+                }
               >
                 Editar
               </Button>
@@ -116,7 +118,7 @@ const YouTubeVideoView = ({ media }) => {
                 className="mt-2 me-3 w-20"
                 variant="outline-danger"
                 size="sm"
-                onClick={()=>deleteVideo(video.id)}
+                onClick={() => delVideo(video.id)}
               >
                 Eliminar
               </Button>

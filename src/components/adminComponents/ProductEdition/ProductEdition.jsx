@@ -2,32 +2,37 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductById, getStoredImgs } from "../../../redux/actions";
-import { updateProduct } from "../../../utils/productEndPoints";
-import showConfirmationDialog from "../../../Auth/generalComponents/sweetAlert";
+import { updateProduct } from "../../../Endpoints/endpoints";
+import showConfirmationDialog from "../../../Endpoints/sweetAlert";
 import { Form } from "react-bootstrap";
-import * as Ad from "../../../views/AdminViews/AdminIndex"
+import {InfoFormField} from "../../adminComponents/AdminIndex";
 //import "./productstyle.css";
 import ImageUploader from "../../../utils/ImageUploader";
 import ImageSelector from "../../../utils/ImageSelector";
 import Loading from "../../Loading";
-import * as Inf from '../../../infoHelpers'
+import {aboutSeo} from "../../../infoHelpers";
 
 const ProductEdition = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
   const page = useSelector((state) => state.ProductId);
-  const [imgUrl, setImgUrl] = useState(false)
-  const [load, setLoad] = useState(false)
+  const [imgUrl, setImgUrl] = useState(false);
+  const [load, setLoad] = useState(false);
 
   useEffect(() => {
     dispatch(getProductById(id));
-    dispatch(getStoredImgs())
+    dispatch(getStoredImgs());
   }, [id]);
 
   const onClose = () => {
     navigate(-1);
-    setLoad(false)
+    setLoad(false);
+  };
+  const onRetry = () => {
+    setTimeout(() => {
+      onClose();
+    }, 3000);
   };
 
   const [product, setProduct] = useState({
@@ -77,19 +82,18 @@ const ProductEdition = () => {
   };
 
   const handleImgUrlSwitchChange = () => {
-    setImgUrl(prev => {
+    setImgUrl((prev) => {
       const newValue = !prev; // Invertir el estado actual de imgUrl
-  
+
       // Actualizar useImg según el nuevo valor de imgUrl
-      setProduct(prevProduct => ({
+      setProduct((prevProduct) => ({
         ...prevProduct,
         useImg: newValue, // Establecer useImg en true o false
       }));
-  
+
       return newValue; // Retornar el nuevo valor de imgUrl
     });
   };
-  
 
   const handleSubmit = async () => {
     // Lógica para actualizar el producto
@@ -98,43 +102,44 @@ const ProductEdition = () => {
     );
     if (confirmed) {
       // Si el usuario hace clic en "Aceptar", ejecutar la funcion:
-      await updateProduct(id, product, onClose);
-      setLoad(true)
+      await updateProduct(id, product, onClose, onRetry);
+      console.log('update: ',product)
+      setLoad(true);
     }
   };
   return (
     <div className="imageBack">
-      {load?
-      <Loading/>
-      :
-      <div className="coverBack">
-        <div className="container-md modal-content colorBack formProductContainer rounded-4 shadow">
-          <div className="container mt-5">
-            <h1>Actualizacion de producto</h1>
-            <section className="needs-validation" id="updateForm" noValidate>
-              <div className="row">
-                {imgUrl ?
-                <div className="col-md-6 mb-3">
-                  <ImageSelector onImageSelect={handleImageChange}/>
-                </div>
-                :
-                <div className="col-md-6 mb-3">
-                  <ImageUploader
-                    titleField={"Imagen portada:"}
-                    imageValue={product.landing}
-                    onImageUpload={handleImageChange}
-                  />
-                  </div>
-                  }
+      {load ? (
+        <Loading />
+      ) : (
+        <div className="coverBack">
+          <div className="container-md modal-content colorBack formProductContainer rounded-4 shadow">
+            <div className="container mt-5">
+              <h1>Actualizacion de producto</h1>
+              <section className="needs-validation" id="updateForm" noValidate>
+                <div className="row">
+                  {imgUrl ? (
+                    <div className="col-md-6 mb-3">
+                      <ImageSelector onImageSelect={handleImageChange} />
+                    </div>
+                  ) : (
+                    <div className="col-md-6 mb-3">
+                      <ImageUploader
+                        titleField={"Imagen portada:"}
+                        imageValue={product.landing}
+                        onImageUpload={handleImageChange}
+                      />
+                    </div>
+                  )}
                 </div>
                 <div className="mb-3 form-check form-switch">
-                    <Form.Check 
-                      type="switch"
-                      id="imgUrlSwitch"
-                      checked={imgUrl}
-                      label="Active para elegir imagen guardada"
-                      onChange={handleImgUrlSwitchChange}
-                    />
+                  <Form.Check
+                    type="switch"
+                    id="imgUrlSwitch"
+                    checked={imgUrl}
+                    label="Active para elegir imagen guardada"
+                    onChange={handleImgUrlSwitchChange}
+                  />
                 </div>
                 <div className="col-md-6 mb-3"></div>
                 <div className="mb-3">
@@ -155,7 +160,7 @@ const ProductEdition = () => {
                   <label htmlFor="info_header" className="form-label">
                     Info posicionamiento:
                   </label>
-                  <Ad.InfoFormField action={'hover'} info={Inf.aboutSeo}/>
+                  <InfoFormField action={"hover"} info={aboutSeo} />
                   <textarea
                     className="form-control"
                     type="text"
@@ -194,15 +199,15 @@ const ProductEdition = () => {
                     <option value="true">Mostrar</option>
                     <option value="false">No mostrar</option>
                   </select>
-                 </div>
-                 <div className="mb-3 form-check form-switch">
-                    <Form.Check 
-                      type="switch"
-                      id="saver"
-                      checked={product.saver}
-                      label="Active para conservar imagen antigua"
-                      onChange={handleSwitchChange}
-                    />
+                </div>
+                <div className="mb-3 form-check form-switch">
+                  <Form.Check
+                    type="switch"
+                    id="saver"
+                    checked={product.saver}
+                    label="Active para conservar imagen antigua"
+                    onChange={handleSwitchChange}
+                  />
                 </div>
                 <div className="d-flex flex-row me-3">
                   <button
@@ -222,11 +227,11 @@ const ProductEdition = () => {
                     Cancelar
                   </button>
                 </div>
-            </section>
+              </section>
+            </div>
           </div>
         </div>
-      </div>
-        }
+      )}
     </div>
   );
 };

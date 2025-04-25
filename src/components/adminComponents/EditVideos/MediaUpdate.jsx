@@ -2,17 +2,17 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getMediaById, cleanState } from "../../../redux/actions";
-import showConfirmationDialog from "../../../Auth/generalComponents/sweetAlert";
-import InfoFormField from "../../../views/AdminViews/InfoFormField";
+import showConfirmationDialog from "../../../Endpoints/sweetAlert";
+import InfoFormField from "../../adminComponents/InfoFormField";
 import * as val from "../../../utils/videoValidate";
-import {updateMedia}from "../../../utils/landingPageEndpoints"
-import Loading from '../../Loading'
+import {updateVideo} from '../../../Endpoints/endpoints'
+import Loading from "../../Loading";
 
 const MediaUpdate = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const [load, setLoad] = useState(false)
+  const [load, setLoad] = useState(false);
 
   const queryParams = new URLSearchParams(location.search);
   const videoType = queryParams.get("type"); // Obtener el tipo de video
@@ -28,7 +28,12 @@ const MediaUpdate = () => {
 
   const onClose = () => {
     navigate(-1);
-    setLoad(false)
+    setLoad(false);
+  };
+  const onRetry = () => {
+    setTimeout(() => {
+      onClose();
+    }, 3000);
   };
 
   const [item, setItem] = useState({
@@ -76,8 +81,6 @@ const MediaUpdate = () => {
     }
   };
 
-
-
   // Enviar el formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -87,107 +90,104 @@ const MediaUpdate = () => {
     if (confirmed) {
       // Aquí iría la lógica para actualizar el elemento
       //console.log("Elemento actualizado:", item);
-       await updateMedia(id, item, onClose)
-       setLoad(true)
+      await updateVideo(id, item, onClose, onRetry);
+      setLoad(true);
     }
   };
 
   const permit =
-    !item.url.trim() ||
-    !item.title.trim() ||
-    !item.text.trim() ||
-    error.url;
+    !item.url.trim() || !item.title.trim() || !item.text.trim() || error.url;
 
   return (
     <div className="imageBack">
-      {load?
-      <Loading/>
-      :
-      <div className="coverBack">
-        <div className="container-md modal-content colorBack formProductContainer rounded-4 shadow">
-          <div className="container mt-5">
-            <h3>Modificar video de {videoType}:</h3>
-            <form className="needs-validation" id="createForm" noValidate>
-              <div className="mb-3">
-                <label htmlFor="url" className="form-label">
-                  Url de {videoType}:
-                </label>
-                <div className="d-flex flex-row me-3">
+      {load ? (
+        <Loading />
+      ) : (
+        <div className="coverBack">
+          <div className="container-md modal-content colorBack formProductContainer rounded-4 shadow">
+            <div className="container mt-5">
+              <h3>Modificar video de {videoType}:</h3>
+              <form className="needs-validation" id="createForm" noValidate>
+                <div className="mb-3">
+                  <label htmlFor="url" className="form-label">
+                    Url de {videoType}:
+                  </label>
+                  <div className="d-flex flex-row me-3">
+                    <input
+                      className="form-control"
+                      id="url"
+                      name="url"
+                      value={item.url}
+                      onChange={handleItemChange}
+                    />
+                    <InfoFormField
+                      place={"left"}
+                      action={"hover"}
+                      info={`Copie y pegue aquí la URL de ${videoType} que desea guardar`}
+                    />
+                  </div>
+                  {error.url && <p className="errorMsg">{error.url}</p>}
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="title" className="form-label">
+                    Título:
+                  </label>
                   <input
                     className="form-control"
-                    id="url"
-                    name="url"
-                    value={item.url}
+                    id="title"
+                    name="title"
+                    value={item.title}
                     onChange={handleItemChange}
-                  />
-                  <InfoFormField
-                    place={"left"}
-                    action={"hover"}
-                    info={`Copie y pegue aquí la URL de ${videoType} que desea guardar`}
                   />
                 </div>
-                {error.url && <p className="errorMsg">{error.url}</p>}
-              </div>
-              <div className="mb-3">
-                <label htmlFor="title" className="form-label">
-                  Título:
-                </label>
-                <input
-                  className="form-control"
-                  id="title"
-                  name="title"
-                  value={item.title}
-                  onChange={handleItemChange}
-                />
-              </div>
-              <div className="mb-3">
-                <label htmlFor="text" className="form-label">
-                  Descripción:
-                </label>
-                <textarea
-                  className="form-control"
-                  id="text"
-                  name="text"
-                  rows="3"
-                  value={item.text}
-                  onChange={handleItemChange}
-                />
-              </div>
-              <label htmlFor="enable" className="form-label">
-                    Mostrar al publico
+                <div className="mb-3">
+                  <label htmlFor="text" className="form-label">
+                    Descripción:
                   </label>
-                  <select
-                    className="form-select mb-2"
-                    id="enable"
-                    name="enable"
-                    value={item.enable}
+                  <textarea
+                    className="form-control"
+                    id="text"
+                    name="text"
+                    rows="3"
+                    value={item.text}
                     onChange={handleItemChange}
+                  />
+                </div>
+                <label htmlFor="enable" className="form-label">
+                  Mostrar al publico
+                </label>
+                <select
+                  className="form-select mb-2"
+                  id="enable"
+                  name="enable"
+                  value={item.enable}
+                  onChange={handleItemChange}
+                >
+                  <option value="true">Mostrar</option>
+                  <option value="false">No mostrar</option>
+                </select>
+                <div className="d-flex flex-row me-3">
+                  <button
+                    className="btn btn-md btn-primary mb-3 me-2"
+                    type="button"
+                    onClick={handleSubmit}
+                    disabled={permit}
                   >
-                    <option value="true">Mostrar</option>
-                    <option value="false">No mostrar</option>
-                  </select>
-              <div className="d-flex flex-row me-3">
-                <button
-                  className="btn btn-md btn-primary mb-3 me-2"
-                  type="button"
-                  onClick={handleSubmit}
-                  disabled={permit}
-                >
-                  Actualizar
-                </button>
-                <button
-                  className="btn btn-md btn-secondary mb-3 me-2"
-                  type="button"
-                  onClick={onClose}
-                >
-                  Cancelar
-                </button>
-              </div>
-            </form>
+                    Actualizar
+                  </button>
+                  <button
+                    className="btn btn-md btn-secondary mb-3 me-2"
+                    type="button"
+                    onClick={onClose}
+                  >
+                    Cancelar
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-        }
+      )}
     </div>
   );
 };
